@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link th:href="@{css/dashboard.css}" rel="stylesheet" type="text/css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <nav class="navbar sticky-top navbar-expand-lg" style="background-color: #ffffff";>
+
+        <a class="navbar-brand text-white" th:href="@{/home}">
+            <i class="fas fa-less-than" style="padding: 5px; color: #2474A6"></i>
+        </a>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+
+                <a th:href="@{/settings}">
+                    <i class="fas fa-cog" style="padding: 5px; color: #2474A6"></i>
+                </a>
+
+                <a th:href="@{/home}">
+                    <i class="fas fa-home" style="padding: 5px; color: #2474A6"></i>
+                </a>
+
+
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Log out" />
+                </form>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <div>
+        <h1>Choose Your Start Point</h1>
+    </div>
+
+    <section class = "choose">
+        <div class="row">
+            <div class="col span-1of-2 textbox">
+                <a th:href="@{/user/{username}(username=${#authentication.name})}">
+                    <img class="img1"  th:src="@{images/account-img.png}" alt="account photo">
+                </a>
+                <h2 style="color:#2474A6">Portfolio</h2>
+                <p>Go to your Portfolio.</p>
+            </div>
+
+            <div class="col span-1of-2 textbox">
+                <a th:href="@{/choose}">
+                    <img class="img1"  th:src="@{images/template.png}" alt="tempalte">
+                </a>
+                <h2 style="color:#2474A6">Template</h2>
+                <p>Change your portfolio template.</p>
+            </div>
+        </div>
+
+    </section>
+
+
+
+</div>
+
+</body>
+</html>

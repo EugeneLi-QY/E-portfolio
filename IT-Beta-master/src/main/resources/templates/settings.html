@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <link th:href="@{/css/settings.css}" rel="stylesheet" type="text/css"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Setting</title>
+</head>
+
+
+
+<body>
+<div>
+    <nav id="changeColor" class="navbar sticky-top navbar-expand-lg" style="background-color: #ffffff">
+
+            <a class="navbar-brand text-white" th:href="@{/hello}">
+                <i class="fas fa-less-than" style="padding: 5px; color:#2474a6"></i>
+            </a>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+
+                    <a th:href="@{/settings}">
+                        <i class="fas fa-cog" style="padding: 5px; color:#2474a6"></i>
+                    </a>
+
+                    <a th:href="@{/home}">
+                        <i class="fas fa-home" style="padding: 5px; color:#2474a6"></i>
+                    </a>
+
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Log out"/>
+                    </form>
+
+                </div>
+            </div>
+
+        </nav>
+
+
+    <div class="main">
+        <h1>Settings</h1>
+
+        <div th:if="${message}">
+            <div class="container">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <p th:text="${message}"/>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${error}">
+            <div class="container">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <p th:text="${error}"/>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <h3 id="heading2">Account</h3>
+        <form th:action="@{/settings}" th:object="${userSettings}" method="post" enctype="utf8">
+            <div class="visibility">
+                <lable>Profile visibility</lable>
+                <select th:field="*{privacy}">
+                    <option value="private">Private</option>
+                    <option value="public">Visible to all</option>
+                </select>
+            <input type="submit" value="Change">
+            </div>
+        </form>
+        <br>
+        <form th:action="@{/changePassword}" method="post" enctype="utf8">
+            <div>
+                <label>Current
+                    <input type="password" name="current">
+                </label>
+            </div>
+            <div>
+                <label>New
+                    <input type="password" name="new">
+                </label>
+            </div>
+            <div>
+                <label>Retype New
+                    <input type="password" name="retype">
+                </label>
+            </div>
+            <input type="submit" value="Change">
+        </form>
+
+    </div>
+
+</div>
+</body>
+
+
+
+
+
+    <script>
+        function changeNav(color){
+            document.getElementById("changeColor").style.background = color;
+            document.getElementById("heading1").style.color = color;
+            document.getElementById("heading2").style.color= color;
+
+        }
+
+
+
+    </script>
+
+
+
+</html>

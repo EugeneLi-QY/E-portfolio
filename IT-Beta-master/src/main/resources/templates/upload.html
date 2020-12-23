@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link th:href="@{/css/upload.css}" rel="stylesheet" type="text/css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload</title>
+</head>
+
+
+<body>
+
+<nav class="navbar sticky-top navbar-expand-lg" style="background-color: #ffffff">
+
+    <a class="navbar-brand text-white" th:href="@{/user/{username}(username=${#authentication.name})}">
+        <i class="fas fa-less-than" style="padding: 5px; color:#2474a6"></i>
+    </a>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+
+            <a th:href="@{/settings}">
+                <i class="fas fa-cog" style="padding: 5px; color:#2474a6"></i>
+            </a>
+
+            <a th:href="@{/home}">
+                <i class="fas fa-home" style="padding: 5px; color:#2474a6"></i>
+            </a>
+
+
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Log out"/>
+            </form>
+
+        </div>
+    </div>
+
+</nav>
+
+<h1>
+    <p th:inline="text">[[${#httpServletRequest.remoteUser}]]</p>
+</h1>
+<h2>PORTFOLIO</h2>
+<div class="main">
+
+    <form method="POST" th:action="@{/uploadMultipleFiles}" enctype="multipart/form-data">
+        <div class="row1">
+            <div class="column1">
+                <div class="upload-btn-wrapper1">
+                    <button class="btn">Upload Your Document</button>
+                    <input type="file" name="display" onchange="loadFile(event)"/>
+                </div>
+                <img id="output" width="100%" />
+            </div>
+            <div class="column2 form-group">
+                <input type="text" class="form-control" placeholder="project name" name="projectName">
+            </div>
+        </div>
+
+
+        <div id="box">
+            <p>
+
+            <div id="0" onclick="getParentID(this);" class="upload-btn-wrapper">
+                <button class="btn">Upload Your Document</button>
+                <input type="file" name="files" onchange="readURL(this)"/>
+            </div>
+
+
+            <div class="row1">
+
+                <div class="column1" id="c-0">
+                    <img id="im-0" width="100%" th:src="@{images/fileBackground.png}">
+                </div>
+
+                <div class="column2 form-group">
+                    <textarea class="form-control" rows="8" placeholder="Add Your text." name="descriptions"></textarea>
+                </div>
+
+            </div>
+            </p>
+
+        </div>
+
+        <input type="button" value="Add File" onclick="addFile();addRemove();" />
+        <input id="submitButton" value="Submit" type="submit"/>
+
+    </form>
+
+
+</div>
+</body>
+
+
+
+<script type="text/javascript" th:inline="javascript">
+
+        $('#submitButton').click(function() {
+            location.reload();
+            $('body').append('<div id="loading"><img id="loading-image" src="https://media.giphy.com/media/KG4PMQ0jyimywxNt8i/giphy.gif" alt="Loading..." /><br>submitted successfully</br></div>');
+            $(window).on('load', function(){
+                setTimeout(removeLoader, 2000);
+            });
+            function removeLoader(){
+                $( "#loading" ).fadeOut(500, function() {
+                    $( "#loading" ).remove();
+                });
+            }
+        });
+
+
+
+
+    function addElement(parentId, elementTag, elementId, html) {
+        let p = document.getElementById(parentId);
+        let newElement = document.createElement(elementTag);
+        newElement.setAttribute('id', elementId);
+        newElement.innerHTML = html;
+        p.appendChild(newElement);
+    }
+
+
+
+    let imageId = 0;
+    let fileId = 0;
+    function addFile() {
+        imageId++;
+        fileId++;
+        let html =  '<div id="'+imageId+'" onclick="getParentID(this);addRemove();" class="upload-btn-wrapper">';
+        html +=  ' <button class="btn">Upload Your Document</button>';
+        html +=  '<input type="file" name="files" onchange="readURL(this)"/>';
+        html +=  '</div>';
+        html += '<span style="float:right;"><button class="upload1">Remove <i class="fas fa-times"></i></button></span>';
+        html += '<div class="row1">';
+        html +=  '<div class="column1" id="c-'+imageId+'">';
+        html += '<img  id="im-'+imageId+'" width="100%" th:src="@{images/fileBackground.png}">';
+        html +=  '</div>';
+        html +=  '<div class="column2 form-group">';
+        html +=  ' <textarea class="form-control" rows="8" placeholder="Add Your text." name="descriptions"></textarea>';
+        html +=  '</div>';
+        html +=  '</div>';
+        addElement('box', 'p', 'file-' + fileId, html);
+    }
+
+
+
+
+    var remove = function(){
+        this.parentNode.remove();
+    };
+
+    function addRemove() {
+        var div = document.getElementById("box");
+        var spans = div.getElementsByTagName("span");
+
+        for (i = 0; i < spans.length; i++) {
+            spans[i].addEventListener('click', remove, false);
+        }
+    }
+
+    var imageID;
+    var imageID2;
+    var imageID3;
+    function getParentID(input){
+        imageID = '#c-' +  input.id;
+        imageID2 = 'im-' +  input.id;
+        imageID3 = '#im-' +  input.id;
+    }
+
+
+    function readURL(input){
+        if (input.files && input.files[0]) {
+            $.each(input.files, function() {
+                var reader = new FileReader();
+
+                if (input.files[0].type.match('image.*')){
+                    reader.onload = function (e) {
+                        $(imageID).append('<img id="'+imageID2+'" src="' + e.target.result + '" width="100%" />');
+                        $(imageID3).remove();
+                        }
+                }
+
+
+                if (input.files[0].type.match('video.*')) {
+                        reader.onload = function (e) {
+                            $(imageID).append('<video id="'+imageID2+'" src="' + e.target.result + '" width="100%" controls/>');
+                            $(imageID3).remove();
+                        }
+                }
+
+
+                if (input.files[0].type.match('audio.*')) {
+                        reader.onload = function (e) {
+                            $(imageID).append('<audio id="'+imageID2+'" src="' + e.target.result + '" width="100%" controls/>');
+                            $(imageID3).remove();
+                        }
+                }
+
+
+                if (input.files[0].type.match('.pdf')) {
+                            reader.onload = function (e) {
+                                $(imageID).append('<embed  id="'+imageID2+'" src="' + e.target.result + '" width="100%" />');
+                                $(imageID3).remove();
+                            }
+                }
+
+
+
+                reader.readAsDataURL(this);
+            });
+        }
+    }
+
+
+    var loadFile = function(event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src)
+            $('.upload-btn-wrapper1').hide();
+
+        }
+    };
+
+</script>
+
+
+
+
+
+
+
+</html>
